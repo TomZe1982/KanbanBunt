@@ -1,11 +1,16 @@
 import './NewTodo.css'
 import { useState } from 'react'
+import PropTypes from 'prop-types';
+NewTodo.propTypes = {
+    onAdd: PropTypes.func
+}
 
-export default function NewTodo(props) {
+
+export default function NewTodo({onAdd}) {
   const [description, setDescription] = useState('')
 
   const handleAddClick = () => {
-    props.onAdd(description).then(() => setDescription(''))
+    onAdd(description).then(() => setDescription(''))
   }
 
   return (
