@@ -54,7 +54,7 @@ public class TodoService {
         return Optional.of(todo);
     }
 
-    private Optional<Todo> findTodo(String todoId) {
+    public Optional<Todo> findTodo(String todoId) {
         return todoRepository.find(todoId);
     }
 
@@ -65,7 +65,28 @@ public class TodoService {
         }
         Todo todo = todoOpt.get();
 
-        // remove todo from repo
         return todoRepository.delete(todo);
+    }
+
+    public Optional<Todo> update(String todoId, Todo todo) {
+        Optional<Todo> todoOpt = findTodo(todoId);
+        if (todoOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        Todo updateTodo = todoOpt.get();
+
+        // id from given will be ignored and must not be updated
+
+        Status status = todo.getStatus();
+        if (status != null) {
+            updateTodo.setStatus(status);
+        }
+        String description = todo.getDescription();
+        if (description != null && description.length() > 0) {
+            updateTodo.setDescription(description);
+        }
+
+        todoRepository.save(updateTodo);
+        return Optional.of(updateTodo);
     }
 }

@@ -150,4 +150,26 @@ class TodoServiceTest {
 
         assertEquals(expected, actualDeletedTodoOpt.get());
     }
+
+    @Test
+    public void testUpdateExistingTodo() {
+        // given
+        TodoService todoService = new TodoService(new TodoRepository());
+
+        // when
+        Todo todo = new Todo("1", "desc", Status.IN_PROGRESS);
+        Todo createdTodo = todoService.create(todo);
+        assertEquals(Status.OPEN, createdTodo.getStatus(), "Todo must be created with status OPEN");
+
+        // then
+        Todo expected = new Todo(null, "other", Status.DONE);
+
+        Optional<Todo> actualUpdatedTodoOpt = todoService.update(createdTodo.getId(), expected);
+        assertTrue(actualUpdatedTodoOpt.isPresent());
+
+        Todo actualTodo = actualUpdatedTodoOpt.get();
+        assertEquals(createdTodo.getId(), actualTodo.getId());
+        assertEquals(expected.getStatus(), actualTodo.getStatus());
+        assertEquals(expected.getDescription(), actualTodo.getDescription());
+    }
 }

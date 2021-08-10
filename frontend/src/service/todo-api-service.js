@@ -3,6 +3,9 @@ import axios from 'axios'
 export const getAllTodos = () =>
   axios.get('/api/todo').then(response => response.data)
 
+export const getTodo = id =>
+    axios.get('/api/todo/'+id).then(response => response.data)
+
 export const postTodo = description =>
   axios.post('/api/todo', { description: description, status: 'OPEN' })
 

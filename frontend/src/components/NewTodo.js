@@ -1,26 +1,34 @@
 import './NewTodo.css'
-import { useState } from 'react'
+import {useState} from 'react'
 import PropTypes from 'prop-types';
-NewTodo.propTypes = {
-    onAdd: PropTypes.func
-}
+import styled from "styled-components/macro";
 
+NewTodo.propTypes = {
+    onAdd: PropTypes.func.isRequired,
+}
 
 export default function NewTodo({onAdd}) {
-  const [description, setDescription] = useState('')
+    const [description, setDescription] = useState('')
 
-  const handleAddClick = () => {
-    onAdd(description).then(() => setDescription(''))
-  }
+    const handleAddClick = () => {
+        onAdd(description).then(() => setDescription(''))
+    }
 
-  return (
-    <section className="new-todo">
-      <input
-        type="text"
-        value={description}
-        onChange={event => setDescription(event.target.value)}
-      />
-      <button onClick={handleAddClick}>Add</button>
-    </section>
-  )
+    return (
+        <NewTodoStyle>
+            <section className="new-todo">
+                <input
+                    type="text"
+                    value={description}
+                    onChange={event => setDescription(event.target.value)}
+                />
+                <button onClick={handleAddClick}>Add</button>
+            </section>
+        </NewTodoStyle>
+    )
 }
+
+const NewTodoStyle = styled.section`
+       display: grid;
+    grid-template-columns: 1fr min-content;
+    padding: 12px;`

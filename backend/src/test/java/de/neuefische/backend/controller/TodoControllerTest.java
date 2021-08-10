@@ -43,7 +43,7 @@ class TodoControllerTest {
         assertEquals(0, actualTodoResponseBody.length);
     }
 
-    @Order(1)
+    @Order(10)
     @Test
     public void testIllegalCreationOfTodo() {
         String url = String.format("http://localhost:%d/api/todo", port);
@@ -58,7 +58,7 @@ class TodoControllerTest {
         assertNull(emptyBody);
     }
 
-    @Order(2)
+    @Order(20)
     @Test
     public void testCreationOfTodoAndGet() {
         String url = String.format("http://localhost:%d/api/todo", port);
@@ -86,7 +86,73 @@ class TodoControllerTest {
         assertEquals(1, actualTodoResponseBody.length);
     }
 
-    @Order(4)
+    @Order(30)
+    @Test
+    public void testGetSingleTodo() {
+        String url = String.format("http://localhost:%d/api/todo", port);
+
+        ResponseEntity<Todo[]> actualTodosResponseGET = testRestTemplate.getForEntity(url, Todo[].class);
+
+        HttpStatus actualStatus = actualTodosResponseGET.getStatusCode();
+        assertEquals(HttpStatus.OK, actualStatus);
+
+        Todo[] actualTodosResponseBody = actualTodosResponseGET.getBody();
+        assertNotNull(actualTodosResponseBody);
+        assertEquals(1, actualTodosResponseBody.length);
+
+        Todo expectedTodo = actualTodosResponseBody[0];
+
+        // get single item
+
+        String getUrl = String.format("http://localhost:%d/api/todo/%s", port, expectedTodo.getId());
+
+        ResponseEntity<Todo> actualTodoResponseGET = testRestTemplate.getForEntity(getUrl, Todo.class);
+
+        HttpStatus actualStatusCode = actualTodoResponseGET.getStatusCode();
+        assertEquals(HttpStatus.OK, actualStatusCode);
+
+        Todo actualTodo = actualTodoResponseGET.getBody();
+        assertNotNull(actualTodo);
+        assertEquals(expectedTodo, actualTodo);
+    }
+
+    @Order(35)
+    @Test
+    public void testUpdateSingleTodo() {
+        String url = String.format("http://localhost:%d/api/todo", port);
+
+        ResponseEntity<Todo[]> actualTodosResponseGET = testRestTemplate.getForEntity(url, Todo[].class);
+
+        HttpStatus actualStatus = actualTodosResponseGET.getStatusCode();
+        assertEquals(HttpStatus.OK, actualStatus);
+
+        Todo[] actualTodosResponseBody = actualTodosResponseGET.getBody();
+        assertNotNull(actualTodosResponseBody);
+        assertEquals(1, actualTodosResponseBody.length);
+
+        Todo originTodo = actualTodosResponseBody[0];
+        assertEquals(originTodo.getStatus(), Status.OPEN);
+
+        // update single item
+
+        Todo expectedTodo = new Todo("-1", "update description", Status.DONE);
+        String updateUrl = String.format("http://localhost:%d/api/todo/%s/update", port, originTodo.getId());
+
+        ResponseEntity<Todo> actualTodoResponsePut = testRestTemplate.exchange(
+                updateUrl, HttpMethod.PUT, new HttpEntity<>(expectedTodo), Todo.class);
+
+        HttpStatus actualStatusCode = actualTodoResponsePut.getStatusCode();
+        assertEquals(HttpStatus.OK, actualStatusCode);
+
+        Todo actualTodo = actualTodoResponsePut.getBody();
+        assertNotNull(actualTodo);
+
+        assertEquals(originTodo.getId(), actualTodo.getId());
+        assertEquals(expectedTodo.getDescription(), actualTodo.getDescription());
+        assertEquals(expectedTodo.getStatus(), actualTodo.getStatus());
+    }
+
+    @Order(40)
     @Test
     public void testMovingATodo() {
         String postUrl = String.format("http://localhost:%d/api/todo", port);
@@ -114,7 +180,7 @@ class TodoControllerTest {
         assertEquals(Status.IN_PROGRESS, actualMovedTodo.getStatus());
     }
 
-    @Order(5)
+    @Order(50)
     @Test
     public void testDeleteUnknownTodo() {
         String deleteUrl = String.format("http://localhost:%d/api/todo/%s", port, "unknown");
@@ -124,7 +190,7 @@ class TodoControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, deleteResponse.getStatusCode());
     }
 
-    @Order(6)
+    @Order(60)
     @Test
     public void testDeleteBlankTodo() {
         String deleteUrl = String.format("http://localhost:%d/api/todo/%s", port, " ");
@@ -134,7 +200,7 @@ class TodoControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, deleteResponse.getStatusCode());
     }
 
-    @Order(7)
+    @Order(70)
     @Test
     public void deleteTodo() {
         // get current todos created in user journey

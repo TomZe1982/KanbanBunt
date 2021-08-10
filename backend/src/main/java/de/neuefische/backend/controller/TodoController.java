@@ -61,6 +61,22 @@ public class TodoController {
         return todoMovedOpt.get();
     }
 
+    @PutMapping("{id}/update")
+    public Todo updateTodo(@PathVariable("id") String todoId, @RequestBody Todo todo) {
+        Optional<Todo> todoUpdatedOpt;
+        try {
+            todoUpdatedOpt = todoService.update(todoId, todo);
+
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+        if (todoUpdatedOpt.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return todoUpdatedOpt.get();
+    }
+
     @DeleteMapping("{id}")
     public Todo deleteTodo(@PathVariable("id") String todoId) {
         Optional<Todo> todoDeleteOpt;
@@ -75,5 +91,21 @@ public class TodoController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return todoDeleteOpt.get();
+    }
+
+    @GetMapping("{id}")
+    public Todo getTodo(@PathVariable("id") String todoId) {
+        Optional<Todo> todoGetOpt;
+        try {
+            todoGetOpt = todoService.findTodo(todoId);
+
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+        if (todoGetOpt.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return todoGetOpt.get();
     }
 }
