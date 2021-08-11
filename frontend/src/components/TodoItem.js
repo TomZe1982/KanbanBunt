@@ -22,7 +22,9 @@ export default function TodoItem({todo, onAdvance, onDelete}) {
                     <h3>{todo.description}</h3>
                     <TodoButtonStyle>
                         <section>
-                            <Link to={"/details/"+todo.id}>Details</Link>
+
+                            <Link to={"/details/"+todo.id}><ButtonStyleDetails >Details</ButtonStyleDetails></Link>
+
                             {onAdvance && <ButtonStyle advanced onClick={() => onAdvance(todo)}>Advance</ButtonStyle>}
                             {onDelete && <ButtonStyle delete onClick={() => onDelete(todo.id)}>Delete</ButtonStyle>}
                         </section>
@@ -56,3 +58,8 @@ const ButtonStyle = styled.button`
 ${props => props.advanced ? 'background-color: lightcoral;' : ''}
 ${props => props.delete ? 'background-color: lightblue;' : ''}
 `
+
+const ButtonStyleDetails = styled.button`
+    background: aquamarine;
+  box-shadow: blue;
+  `

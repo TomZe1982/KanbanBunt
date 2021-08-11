@@ -14,4 +14,5 @@ export default function Header() {
 const HeaderStyle = styled.header`
   margin: 0;
   padding: 12px;
+  background-color: cornflowerblue;
 `

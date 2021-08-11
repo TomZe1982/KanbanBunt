@@ -2,6 +2,7 @@ import './App.css'
 import Header from './components/Header'
 import BoardsOverview from './components/BoardsOverview'
 import NewTodo from './components/NewTodo'
+import StatusBoard from './components/StatusBoard'
 import {useEffect, useState} from 'react'
 import {
     deleteTodo,
@@ -12,6 +13,8 @@ import {
 import {nextStatus} from './service/todo-service'
 import Detail from "./components/Details";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Impressum from "./components/Impressum";
 
 
 export default function App() {
@@ -46,13 +49,24 @@ export default function App() {
     return (
         <Router>
             <div>
-
+                <NavBar/>
             <Switch>
+                <Route path="/board/:status">
+                    <StatusBoard todos={todos}
+                                 onAdvance={advanceTodo}
+                                 onDelete={removeTodo}/>
+                </Route>
+
                 <Route path="/details/:id">
                     <Detail/>
                 </Route>
 
+                <Route path="/impressum">
+                    <Impressum/>
+                </Route>
+
                 <Route exact path="/">
+
                     <div className="page-layout">
                         <Header/>
                         <BoardsOverview

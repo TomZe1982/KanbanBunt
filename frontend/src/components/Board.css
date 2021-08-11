@@ -1,11 +1,17 @@
 .board {
 
+
 }
 
 .board-list {
+    text-align: center;
     list-style: none;
-    padding: 0;
+    padding: 12px;
     margin: 0;
     display: grid;
     grid-gap: 12px;
+}
+
+h2{
+    text-align: center;
 }

@@ -1,4 +1,4 @@
-import './BoardsOverview.css'
+
 import Board from './Board'
 import PropTypes from 'prop-types';
 import styled from "styled-components/macro";
@@ -40,7 +40,7 @@ export default function BoardsOverview({todos, onAdvance, onDelete}) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 12px;
-    padding: 0 12px;
+    padding: 12px 12px;
     `
     const BoardTodo = styled.div`
     ${props => props.open && props.todos.length > 0 ? `background-color: yellow` : ``}
